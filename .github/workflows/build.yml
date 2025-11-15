@@ -1,0 +1,33 @@
+name: Build
+
+on:
+  release:
+    types: [published]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y cmake ninja-build
+
+      - name: Build
+        run: |
+          chmod +x build.sh
+          ./build.sh ${{ github.event.release.tag_name }}
+
+      - name: Create archive and upload
+        run: |
+          tar -cJf llvm-linux-x86_64.tar.xz -C install .
+          gh release upload ${{ github.event.release.tag_name }} \
+            llvm-linux-x86_64.tar.xz
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
