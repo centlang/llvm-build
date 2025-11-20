@@ -11,23 +11,28 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
+    strategy:
+      matrix:
+        arch: [ x86_64, aarch64 ]
+
     steps:
       - uses: actions/checkout@v5
 
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y cmake ninja-build
+          sudo apt-get install -y cmake ninja-build gcc-aarch64-linux-gnu \
+            g++-aarch64-linux-gnu clang lld
 
-      - name: Build
+      - name: Build LLVM for ${{ matrix.arch }}
         run: |
           chmod +x build.sh
-          ./build.sh ${{ github.event.release.tag_name }}
+          ./build.sh ${{ github.event.release.tag_name }} ${{ matrix.arch }}
 
       - name: Create archive and upload
         run: |
-          tar -cJf llvm-linux-x86_64.tar.xz -C install .
+          tar -cJf llvm-linux-${{ matrix.arch }}.tar.xz -C install/${{ matrix.arch }}-linux-gnu .
           gh release upload ${{ github.event.release.tag_name }} \
-            llvm-linux-x86_64.tar.xz
+            llvm-linux-${{ matrix.arch }}.tar.xz
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
