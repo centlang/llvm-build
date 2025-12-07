@@ -34,7 +34,7 @@ cat - <<EOF > $LLVM_TARGET.cmake
 EOF
 
 cmake -G Ninja ../llvm-project/llvm \
-    -DCMAKE_BUILD_TYPE=Debug \
+    -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_TOOLCHAIN_FILE=$LLVM_TARGET.cmake \
     -DLLVM_HOST_TRIPLE=$LLVM_TARGET \
     -DCMAKE_INSTALL_PREFIX=../install/$LLVM_TARGET
