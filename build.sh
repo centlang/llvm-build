@@ -37,6 +37,8 @@ cmake -G Ninja ../llvm-project/llvm \
     -DCMAKE_BUILD_TYPE=Release \
     -DCMAKE_TOOLCHAIN_FILE=$LLVM_TARGET.cmake \
     -DLLVM_HOST_TRIPLE=$LLVM_TARGET \
+    -DLLVM_ENABLE_ZLIB=OFF \
+    -DLLVM_ENABLE_ZSTD=OFF \
     -DCMAKE_INSTALL_PREFIX=../install/$LLVM_TARGET
 
 cmake --build . --target install
