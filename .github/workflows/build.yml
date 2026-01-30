@@ -8,7 +8,7 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  build-linux:
     runs-on: ubuntu-latest
 
     strategy:
@@ -21,7 +21,6 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-
           sudo apt-get install -y cmake ninja-build gcc-aarch64-linux-gnu \
             g++-aarch64-linux-gnu gcc-riscv64-linux-gnu g++-riscv64-linux-gnu \
             clang lld
@@ -33,8 +32,32 @@ jobs:
 
       - name: Create archive and upload
         run: |
-          tar -cJf llvm-linux-${{ matrix.arch }}.tar.xz -C install/${{ matrix.arch }}-linux-gnu .
+          tar -cJf llvm-linux-${{ matrix.arch }}.tar.xz \
+            -C install/${{ matrix.arch }}-linux-gnu .
           gh release upload ${{ github.event.release.tag_name }} \
             llvm-linux-${{ matrix.arch }}.tar.xz
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Install MSVC
+        uses: ilammy/msvc-dev-cmd@v1
+
+      - name: Build LLVM for Windows
+        shell: cmd
+        run: |
+          .\build.bat ${{ github.event.release.tag_name }}
+
+      - name: Create archive and upload
+        shell: cmd
+        run: |
+          tar -cJf llvm-windows-x86_64.tar.xz -C install .
+          gh release upload ${{ github.event.release.tag_name }} \
+            llvm-windows-x86_64.tar.xz
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
