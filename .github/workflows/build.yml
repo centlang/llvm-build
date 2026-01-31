@@ -57,7 +57,7 @@ jobs:
         shell: cmd
         run: |
           tar -cJf llvm-windows-x86_64.tar.xz -C install .
-          gh release upload ${{ github.event.release.tag_name }} \
+          gh release upload ${{ github.event.release.tag_name }} ^
             llvm-windows-x86_64.tar.xz
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
