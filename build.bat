@@ -2,12 +2,13 @@
 
 setlocal enabledelayedexpansion
 
-if "%~1"=="" (
-    echo USAGE: .\build.bat ^<llvm version^>
+if "%~2"=="" (
+    echo USAGE: .\build.bat ^<llvm version^> ^<build type^>
     exit /b 1
 )
 
 set LLVM_VERSION=%1
+set BUILD_TYPE=%2
 
 set ERRORLEVEL=0
 
@@ -20,7 +21,7 @@ mkdir build install
 cd build
 
 cmake -G Ninja ../llvm-project/llvm ^
-    -DCMAKE_BUILD_TYPE=Release ^
+    -DCMAKE_BUILD_TYPE=%BUILD_TYPE% ^
     -DLLVM_ENABLE_ZLIB=OFF ^
     -DLLVM_ENABLE_DIA_SDK=OFF ^
     -DLLVM_ENABLE_ZSTD=OFF ^
