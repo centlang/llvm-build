@@ -13,5 +13,5 @@ Linux:
 Windows:
 
 ```sh
-.\build.bat <llvm version>
+.\build.bat <llvm version> <build type>
 ```
