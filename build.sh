@@ -8,7 +8,7 @@ if [ "$#" -ne 2 ]; then
 fi
 
 LLVM_VERSION="$1"
-LLVM_TARGET="$2-linux-gnu"
+LLVM_TARGET="$2-unknown-linux-gnu"
 
 rm -rf llvm-project install build
 
