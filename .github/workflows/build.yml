@@ -33,7 +33,7 @@ jobs:
       - name: Create archive and upload
         run: |
           tar -cJf llvm-linux-${{ matrix.arch }}.tar.xz \
-            -C install/${{ matrix.arch }}-linux-gnu .
+            -C install/${{ matrix.arch }}-unknown-linux-gnu .
           gh release upload ${{ github.event.release.tag_name }} \
             llvm-linux-${{ matrix.arch }}.tar.xz
         env:
